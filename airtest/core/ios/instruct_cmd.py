@@ -46,6 +46,9 @@ class InstructHelper(object):
         # 3. Use python (low efficiency): python relay.py -t 5100:5100
         system = platform.system()
         iproxy_path = DEFAULT_IPROXY_PATH.get(system)
+        iproxy_env_path = shutil.which("iproxy")
+        LOGGING.debug(f"[builtin_iproxy_path] default iproxy path: {iproxy_path}")
+        LOGGING.debug(f"[builtin_iproxy_path] shutil.which(\"iproxy\"): {iproxy_env_path}")
         if iproxy_path:
             if system == "Darwin":
                 make_file_executable(iproxy_path)
@@ -152,6 +155,7 @@ class InstructHelper(object):
             creationflags=SUBPROCESS_FLAG
         )
         # something like port binding fail
+        LOGGING.debug(f"[do_proxy] time.sleep(5) after subprocess.Popen")
         time.sleep(5)
 
         if proc.poll() is not None:
