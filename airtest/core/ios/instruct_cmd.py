@@ -44,14 +44,14 @@ class InstructHelper(object):
         # 1. Windows/Mac: iproxy.exe/iproxy -u uid port1 port2
         # 2. Ubuntu linux: apt-get install libusbmuxd-tools; iproxy port1 port2
         # 3. Use python (low efficiency): python relay.py -t 5100:5100
-        if shutil.which("iproxy"):
-            return shutil.which("iproxy")
         system = platform.system()
         iproxy_path = DEFAULT_IPROXY_PATH.get(system)
         if iproxy_path:
             if system == "Darwin":
                 make_file_executable(iproxy_path)
             return iproxy_path
+        if shutil.which("iproxy"):
+            return shutil.which("iproxy")
         warnings.warn("Please install iproxy for a better experience(Ubuntu Linux): apt-get install libusbmuxd-tools")
         return None
 
@@ -152,7 +152,7 @@ class InstructHelper(object):
             creationflags=SUBPROCESS_FLAG
         )
         # something like port binding fail
-        time.sleep(0.5)
+        time.sleep(5)
 
         if proc.poll() is not None:
             stdout, stderr = proc.communicate()
