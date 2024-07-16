@@ -113,6 +113,7 @@ class InstructHelper(object):
         if not self.usb_device:
             raise LocalDeviceError("Currently only supports port forwarding for locally connected iOS devices")
         local_port = random.randint(11111, 20000)
+        LOGGING.debug(f"[setup_proxy] local_port: {local_port}, device_port: {device_port}")
         self.do_proxy(local_port, device_port)
         return local_port, device_port
 
@@ -132,8 +133,10 @@ class InstructHelper(object):
         if not self.usb_device:
             raise LocalDeviceError("Currently only supports port forwarding for locally connected iOS devices")
         proxy_process = self.builtin_iproxy_path() or shutil.which("tidevice")
+        LOGGING.debug(f"[do_proxy] proxy_process: {proxy_process}")
         if proxy_process:
             cmds = [proxy_process, "-u", self._udid, str(port), str(device_port)]
+            LOGGING.debug(f"[do_proxy] cmds: {cmds}")
         else:
             # Port forwarding using python
             self.do_proxy_usbmux(port, device_port)
